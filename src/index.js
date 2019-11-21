@@ -18,6 +18,7 @@ import login from './assets/pages/login/login';
 import './assets/css/flexbox.css'
 import './assets/css/reset.css'
 import './assets/css/style.css'
+import Login from './assets/pages/login/login';
 // realizar a criaçao das rotas
 const Rotas = (
     <Router>
@@ -26,7 +27,7 @@ const Rotas = (
                 <Route exact path="/" component={App} />
                 <Route path="/Categoria" component={() => <Categoria titulo_pagina=" Categorias - Gufos" />} />
                 <Route path="/Evento" component={() => <Evento titulo_pagina="Evento - Gufos" />} />
-                <Route path="/login" component={login} />
+                <Route path="/Login" component={() => <Login titulo_pagina="login - Gufos" />} />
                 <Route component={Notfound} />
             </Switch>
         </div>

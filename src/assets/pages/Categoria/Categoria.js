@@ -6,6 +6,7 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 //import da blibioteca Material Design
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBInput } from 'mdbreact';
+import Cabecalho from '../../componentes/Cabecalho/Cabecalho';
 
 
 class Categoria extends Component {
@@ -180,6 +181,7 @@ class Categoria extends Component {
       let instituicao = "SENAI";
       return (
         <div>
+          <Cabecalho/>
           <main className="conteudoPrincipal">
             <section className="conteudoPrincipal-cadastro">
               <h1 className="conteudoPrincipal-cadastro-titulo">Categorias</h1>
