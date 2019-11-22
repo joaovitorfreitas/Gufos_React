@@ -2,38 +2,85 @@ import React, { Component } from 'react';
 import Footer from '../../componentes/Footer/Footer';
 import '../../css/login.css';
 import Axios from 'axios' // importando axios
+import {parseJwt} from '../../../services/auth'
 
 export default class Login extends Component {
-    constructor(){
+    constructor() {
         super();
 
-        this.state={
-            email:"",
-            senha:""
+        this.state = {
+            email: "",
+            senha: "",
+            erroMensagem: "",
+            isLoading: false
         }
     }
     //atualiza estado genérico, para que seja uma só vez
     atualizaEstado = (event) => {
-        this.setState({[event.target.name] : event.target.value}); 
+        this.setState({ [event.target.name]: event.target.value });
     }
     realizarLogin = (event) => {
         event.preventDefault();
+
+        this.setState({ erroMensagem: '' })
+
+        //Define que uma requisição está em andamento
+        this.setState({ isLoading: true })
+
         let config = {
-            headers:{
-                "Content-Type":"application/JSON",
-                "Access-Control-Allow-Origin":"*"//Cors
+            headers: {
+                "Content-Type": "application/JSON",
+                "Access-Control-Allow-Origin": "*"//Cors
             }
         }
         Axios.post("http://localhost:5000/api/login", {
-            email : this.state.email,
-            senha : this.state.senha
+            email: this.state.email,
+            senha: this.state.senha
         }, config)
-        .then(response => {
-            console.log("Retorno do login: ", response)
-        })
-        .catch(erro => {
-            console.log("Erro:", erro)
-        })
+            .then(response => {
+                // console.log("Retorno do login: ", response)
+                // console.log("Retorno do login: ", response.statusText)
+
+                //Exibe no console somente o token
+                //caso a requisição retorne um status code 200
+                //salva o token no localstorage
+                //e define que a requisição terminou
+                if (response.status === 200) {
+                    localStorage.setItem('usuario-gufos', response.data.token)
+                    this.setState({ isLoading: false })
+
+                    //exibe no console o token
+                    console.log("Meu token é :" + response.data.token)
+
+                    //define base64 recebendo a payload do token
+                    var base64 = localStorage.getItem('usuario-gufos').split('.')[1]
+
+                    //exibe no console o valor de base64
+                    console.log(base64)
+
+                    //exibe no console o valor do payload convertido para string
+                    console.log(window.atob(base64))
+
+                    //exibe no console o valor do paload convertido para JSON
+                    console.log(JSON.parse(window.atob(base64)))
+
+                    //exibe no console o tipo de usuario logado
+                    console.log(parseJwt().Role)
+
+                    if(parseJwt().Role === 'Administrador' ){
+                        this.props.history.push('/categoria')
+                    }else{
+                        this.props.history.push('/evento')
+                    }
+                }
+            })
+            //Caso ocorra algum erro, define o state erroMensagem como 'E-mail' ou invalidos
+            // e define que a requisição terminou
+            .catch(erro => {
+                console.log("Erro:", erro)
+                this.setState({ erroMensagem: 'E-mail ou senha inválidos!' })
+                this.setState({ isLoading: false })
+            })
     }
 
     render() {
@@ -75,11 +122,26 @@ export default class Login extends Component {
                                         id="login__password"
                                     />
                                 </div>
-                                <div class="item">
+                                <div>
+                                    <p style={{ color: 'red' }}>{this.state.erroMensagem}</p>
+                                </div>
+                                {/* <div class="item">
                                     <button type="submit" class="btn btn__login" id="btn__login">
                                         Login
               </button>
-                                </div>
+                                </div> */}
+                                {
+                                    this.state.isLoading === true &&
+                                    <div className="item">
+                                        <button type="submit" className="btn btn_login" disabled> Loading ...</button>
+                                    </div>
+                                }
+                                {
+                                    this.state.isLoading === false &&
+                                    <div className="item">
+                                        <button type="submit" className="btn btn_login" > Login </button>
+                                    </div>
+                                }
                             </form>
                         </div>
                     </div>
