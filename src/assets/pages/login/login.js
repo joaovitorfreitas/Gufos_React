@@ -3,6 +3,7 @@ import Footer from '../../componentes/Footer/Footer';
 import '../../css/login.css';
 import Axios from 'axios' // importando axios
 import {parseJwt} from '../../../services/auth'
+import api from '../../../services/api';
 
 export default class Login extends Component {
     constructor() {
@@ -27,16 +28,22 @@ export default class Login extends Component {
         //Define que uma requisição está em andamento
         this.setState({ isLoading: true })
 
-        let config = {
-            headers: {
-                "Content-Type": "application/JSON",
-                "Access-Control-Allow-Origin": "*"//Cors
-            }
+        // let config = {
+        //     headers: {
+        //         "Content-Type": "application/JSON",
+        //         "Access-Control-Allow-Origin": "*"//Cors
+        //     }
+        // }
+        // Axios.post("http://localhost:5000/api/login", {
+        //     email: this.state.email,
+        //     senha: this.state.senha
+        // }, config)
+        let usuario = {
+        email:this.state.email,
+        Senha:this.state.senha  
         }
-        Axios.post("http://localhost:5000/api/login", {
-            email: this.state.email,
-            senha: this.state.senha
-        }, config)
+        api.post("/login", usuario)
+        
             .then(response => {
                 // console.log("Retorno do login: ", response)
                 // console.log("Retorno do login: ", response.statusText)

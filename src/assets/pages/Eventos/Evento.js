@@ -70,8 +70,6 @@ class Evento extends Component {
             <div className="Evento">
                 <Cabecalho/>
 
-                <Link to="/">Voltar</Link>
-
                 <main class="conteudoPrincipal">
                     <section class="conteudoPrincipal-cadastro">
                         <h1 class="conteudoPrincipal-cadastro-titulo">Eventos</h1>
